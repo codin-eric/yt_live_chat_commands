@@ -2,11 +2,12 @@ import requests
 import logging
 import simpleaudio as sa
 from time import sleep
-from cfg import API_KEY, CHANNEL_ID
+from cfg import API_KEY, CHANNEL_ID, RASPI_HOST
 from constants import (
     YT_API_USER_DATA_ENDPOINT,
     YT_API_VIDEOS_DATA_ENDPOINT,
     YT_API_CHAT_DATA_ENDPOINT,
+    VALID_CMD,
     SOUNDS_CMD,
     CHAR_CMD
 )
@@ -67,18 +68,23 @@ class live_chat():
 
     def _parse(self, frase):
         frases_lst = frase.lower().split(" ")
-        return [cmd for cmd in SOUNDS_CMD.keys() if f"{CHAR_CMD}{cmd}" in frases_lst]
+        return [cmd for cmd in VALID_CMD if f"{CHAR_CMD}{cmd}" in frases_lst]
 
     def _make_sound(self, cmd_lst):
         for cmd in cmd_lst:
-            logger.info(f"making {cmd}")
-            fn = SOUNDS_CMD.get(cmd)
-            if fn:
-                wave_obj = sa.WaveObject.from_wave_file(str(fn))
-                play_obj = wave_obj.play()
-                play_obj.wait_done()  # Wait until sound has finished playing
-            else:
-                logger.warning("Comando no valido")
+            if cmd in SOUNDS_CMD:
+                logger.info(f"making {cmd}")
+                fn = SOUNDS_CMD.get(cmd)
+                if fn:
+                    wave_obj = sa.WaveObject.from_wave_file(str(fn))
+                    play_obj = wave_obj.play()
+                    # play_obj.wait_done()  # Wait until sound has finished playing
+                else:
+                    logger.warning("Comando no valido")
+
+    def make_light(self, cmd_lst):
+        if "led" in cmd_lst:
+            requests.get(RASPI_HOST)
 
     def scan_chat(self, ignore_history):
         if ignore_history:
@@ -112,6 +118,7 @@ class live_chat():
                     pass
             if len(cmd_lst) > 0:
                 self._make_sound(cmd_lst)
+                self.make_light(cmd_lst)
             sleep(5)
 
 

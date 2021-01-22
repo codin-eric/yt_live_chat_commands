@@ -45,6 +45,12 @@ poetry yt_live_chat_commands/main.py
 - [x] Cambiar la logica del flag en `live_chat.scan_chat`
 - [x] Hacer que al iniciar no ejecute comandos
 - [x] Cambiar prints por logs
+- [x] Implementar metodo !luz
+- [ ] Desacoplar los comandos de sonido contra otros
+- [ ] Mejorar la logica de validación de comandos
+
+
+# Backlog
 - [ ] Implementar la ejecución de distintas funciones
 - [ ] Limitar los llamados por usuario
 

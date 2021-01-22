@@ -7,6 +7,8 @@ SOUNDS_SRC = SRC_ROOT / "sounds"
 
 SOUNDS_CMD = {x.stem: x for x in SOUNDS_SRC.glob("**/*")}
 
+VALID_CMD = list(SOUNDS_CMD.keys()) + ["led"]
+
 CHAR_CMD = "!"
 
 

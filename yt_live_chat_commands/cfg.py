@@ -7,3 +7,4 @@ config = AutoConfig(search_path=SRC_ROOT)
 
 API_KEY = config('API_KEY', None)
 CHANNEL_ID = config('CHANNELID', None)
+RASPI_HOST = "http://192.168.0.210:5000/led"
