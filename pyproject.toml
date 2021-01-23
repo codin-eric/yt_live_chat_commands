@@ -5,10 +5,11 @@ description = ""
 authors = ["codinEirc <risheric@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.7.1"
 requests = "^2.25.1"
 python-decouple = "^3.4"
 simpleaudio = "^1.0.4"
+pandas = "^1.2.1"
 
 [tool.poetry.dev-dependencies]
 pdbpp = "^0.10.2"

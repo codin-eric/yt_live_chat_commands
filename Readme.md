@@ -46,11 +46,21 @@ poetry yt_live_chat_commands/main.py
 - [x] Hacer que al iniciar no ejecute comandos
 - [x] Cambiar prints por logs
 - [x] Implementar metodo !luz
-- [ ] Desacoplar los comandos de sonido contra otros
-- [ ] Mejorar la logica de validación de comandos
+- [x] Conseguir información de los viewers
+- [x] Parsear la información de los viewers 
+- [x] guardar la información de cada mensaje en un archivo
+- [ ] .cache file -> id_chat y paginación
+- [ ] Agregar timestamp al .cache para deprecarlo 
+- [ ] Hacer una salida segura sin Ctrl + C
+- [ ] Revisar como appendear el df de viewers
+- [ ] Crear una web que muestre un ranking por mayor interacción
+
+
 
 
 # Backlog
+- [ ] Desacoplar los comandos de sonido contra otros
+- [ ] Mejorar la logica de validación de comandos
 - [ ] Implementar la ejecución de distintas funciones
 - [ ] Limitar los llamados por usuario
 
