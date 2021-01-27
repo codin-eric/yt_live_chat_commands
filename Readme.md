@@ -49,16 +49,25 @@ poetry yt_live_chat_commands/main.py
 - [x] Conseguir información de los viewers
 - [x] Parsear la información de los viewers 
 - [x] guardar la información de cada mensaje en un archivo
-- [ ] .cache file -> id_chat y paginación
-- [ ] Agregar timestamp al .cache para deprecarlo 
-- [ ] Hacer una salida segura sin Ctrl + C
-- [ ] Revisar como appendear el df de viewers
+- [x] .cache file -> id_chat y paginación
+- [x] No guardar datos cuando el df está vacio
+- [x] Guardar datos de viewers en archivos separados en carpeta `data`
+- [x] Agregar timestamp al .cache para deprecarlo 
+- [ ] Agregar una validación de Pathlib para crear el folder `data` 
 - [ ] Crear una web que muestre un ranking por mayor interacción
+    - [ ] Crear flask server
+    - [ ] Crear endpoint que lee los archivos
+    - [ ] Procesar los archivos y conseguir el top
+    - [ ] Crear un index que haga AJAX al endpoint
+    - [ ] Integrar index con OBS
+    - [ ] Hacer un lindo CSS
 
-
-
+# Blocked
+- [ ] Enviar un mensaje de !help con los comandos habilitados
+    - Necesito encontrar la forma de poder crear una cred OAth
 
 # Backlog
+- [ ] Hacer una salida segura sin Ctrl + C | check pynput https://pypi.org/project/pynput/
 - [ ] Desacoplar los comandos de sonido contra otros
 - [ ] Mejorar la logica de validación de comandos
 - [ ] Implementar la ejecución de distintas funciones

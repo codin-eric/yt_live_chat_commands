@@ -1,6 +1,7 @@
 import requests
 import logging
 import simpleaudio as sa
+from datetime import datetime, timedelta
 from time import sleep
 from cfg import API_KEY, CHANNEL_ID, RASPI_HOST
 import pandas as pd
@@ -13,6 +14,7 @@ from constants import (
     VALID_CMD,
     SOUNDS_CMD,
     CHAR_CMD,
+    VIEWER_DIR,
     VIEWER_FILE,
     CACHE_FILE
 )
@@ -28,12 +30,19 @@ class live_chat():
 
             if len(cache_str) > 0:
                 cached_data = json.loads(cache_str)
-                self.chat_id = cached_data.get("chat_id")
-                self.next_page = cached_data.get("next_page")
+                past_days = datetime.now() - timedelta(days=1)
+                ts = cached_data.get("timestamp")
+                ts_date = datetime.strptime(ts, '%Y-%m-%d %H:%M:%S.%f')
+
+                if ts_date > past_days:
+                    self.ts = ts_date
+                    self.chat_id = cached_data.get("chat_id")
+                    self.next_page = cached_data.get("next_page")
 
     def _write_cache(self):
         with open(CACHE_FILE, "w") as cachef:
             cache_dict = {
+                "timestamp": datetime.strftime(self.ts, '%Y-%m-%d %H:%M:%S.%f') if self.ts is not None else datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f'),
                 "chat_id": self.chat_id,
                 "next_page": self.next_page
             }
@@ -42,6 +51,7 @@ class live_chat():
     def __init__(self):
         """Search the chat_id by user_id
         """
+        self.ts = None
         self.chat_id = None
         self.next_page = None
 
@@ -76,6 +86,26 @@ class live_chat():
 
             self.chat_id = streamData['liveStreamingDetails']['activeLiveChatId']
             self.next_page = None
+
+    def _send_msg(self, msg):
+
+        snippet = {
+            "liveChatId": self.chat_id,
+            "type": "textMessageEvent",
+            "textMessageDetails": {
+                "messageText": msg
+            }
+        }
+
+        params = {
+            'part': {
+                'snippet': snippet,
+                'key': API_KEY
+            },
+        }
+        breakpoint()
+        requests.post(YT_API_CHAT_DATA_ENDPOINT,
+                      headers=None, params=params)
 
     def _get_liveChatId(self):
         """Get all the message starting at `next_page`
@@ -113,12 +143,14 @@ class live_chat():
             requests.get(RASPI_HOST)
 
     def _save_viewers(self, items):
-        viewer_lst = []
-        for item in items:
-            viewer_lst.append(item["authorDetails"])
+        if len(items) > 0:
+            viewer_lst = []
+            for item in items:
+                viewer_lst.append(item["authorDetails"])
 
-        df = pd.DataFrame(viewer_lst)
-        df.to_json(VIEWER_FILE, orient="records", lines=True)
+            df = pd.DataFrame(viewer_lst)
+            file_name = VIEWER_DIR / f"{datetime.now()}_{VIEWER_FILE}"
+            df.to_json(file_name)
 
     def scan_chat(self):
         logger.info("Starting listening")
@@ -151,4 +183,5 @@ class live_chat():
 
 if __name__ == "__main__":
     scanner = live_chat()
+    # scanner._send_msg("Soy un mensaje de pruebas!")
     scanner.scan_chat()

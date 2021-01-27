@@ -10,7 +10,9 @@ SOUNDS_CMD = {x.stem: x for x in SOUNDS_SRC.glob("**/*")}
 VALID_CMD = list(SOUNDS_CMD.keys()) + ["led"]
 
 CHAR_CMD = "!"
-VIEWER_FILE = "viewer.jsonl"
+
+VIEWER_DIR = SRC_ROOT / "data"
+VIEWER_FILE = "viewer.csv"
 CACHE_FILE = ".cache"
 
 YT_API_USER_DATA_ENDPOINT = 'https://www.googleapis.com/youtube/v3/search'
